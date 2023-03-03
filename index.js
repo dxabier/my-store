@@ -1,6 +1,8 @@
 const express = require('express');
 const routerApi = require('./routes');
 
+const { logErrors, errorHandler } = require('./middlewares/error.handler');
+
 const app = express();
 const port = 3000;
 
@@ -16,14 +18,11 @@ app.get("/nueva-ruta", (req, res) => {
 
 routerApi(app)
 
-app.get("/people/:id",(req, res)=> {
-  const {id} = req.params;
-  res.json({
-    id,
-    Name: "Fulano",
-    orden: 23
-  })
-});
+//midlewares deben ir depues del routing, tener en cuenta el orden en que se ejecuta
+app.use(logErrors);
+app.use(errorHandler);
+
+
 
 
 
